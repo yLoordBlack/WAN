@@ -3,7 +3,7 @@ ROTEADOR 1:
 Router>
 Router> enable
 Router# conf t
-Router1(config)# interface s0/0/0
+Router1(config)# interface s0/1/0
 Router1(config-if)# ip address 10.0.0.1 255.255.255.0
 Router1(config-if)# no shutdown
 Router1(config-if)# exit
