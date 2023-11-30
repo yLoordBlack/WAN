@@ -1,0 +1,279 @@
+ROTEADOR 1:
+
+Router>
+Router> enable
+Router# conf t
+Router1(config)# interface s0/0/0
+Router1(config-if)# ip address 10.0.0.1 255.255.255.0
+Router1(config-if)# no shutdown
+Router1(config-if)# exit
+Router1(config)# interface f0/0
+Router1(config-if)# ip address 192.168.0.1 255.255.255.0
+Router1(config-if)# no shutdown
+Router1(config-if)# exit
+Router1(config)#
+
+
+ROTEADOR 2:
+
+Router2>
+Router2> enable
+Router2# conf t
+Router2(config)# interface s0/0/0
+Router2(config-if)# ip address 10.0.0.2 255.255.255.0
+Router2(config-if)# no shutdown
+Router2(config-if)# exit
+Router2(config)# interface s0/0/1
+Router2(config-if)# ip address 11.0.0.1 255.255.255.0
+Router2(config-if)# no shutdown
+Router2(config-if)# exit
+Router2(config)# interface f0/0
+Router2(config-if)# ip address 192.168.1.1 255.255.255.0
+Router2(config-if)# no shutdown
+Router2(config-if)# exit
+Router2(config)#
+
+
+ROTEADOR 3:
+
+Router3>
+Router3> enable
+Router3# conf t
+Router3(config)# interface s0/0/1
+Router3(config-if)# ip address 11.0.0.2 255.255.255.0
+Router3(config-if)# no shutdown
+Router3(config-if)# exit
+Router3(config)# interface f0/0
+Router3(config-if)# ip address 192.168.2.1 255.255.255.0
+Router3(config-if)# no shutdown
+Router3(config-if)# exit
+Router3(config)#
+
+VERIFICAR ROTAS NOS ROTEADORES
+
+Switch> enable
+Switch# show ip route
+
+
+IMPLEMENTAR RIP ROTEADOR 1
+
+Router1>
+Router1> enable
+Router# conf t
+Router1(config)# router rip
+Router1(config-router)# version 2
+Router1(config-router)# network 10.0.0.0
+Router1(config-router)# network 192.168.0.0
+
+
+IMPLEMENTAR RIP ROTEADOR 2
+
+Router2>
+Router2> enable
+Router2# conf t
+Router2(config)# router rip
+Router2(config-router)# version 2
+Router2(config-router)# network 10.0.0.0
+Router2(config-router)# network 192.168.1.0
+Router2(config-router)# network 11.0.0.0
+
+
+IMPLEMENTAR RIP ROTEADOR 3
+
+Router3>
+Router3> enable
+Router3# conf t
+Router3(config)# router rip
+Router3(config-router)# version 2
+Router3(config-router)# network 11.0.0.0
+Router3(config-router)# network 192.168.2.0
+Router3(config-router)# end
+Router3# show ip route
+
+
+IMPLEMENTAR DHCP ROTEADOR 1
+
+Router1>
+Router1> enable
+Router1# conf t
+Router1(config)# ip dhcp excluded-address 192.168.0.1
+Router1(config)# ip dhcp pool voz
+Router1(dhcp-config)# network 192.168.0.0 255.255.255.0
+Router1(dhcp-config)# default-router 192.168.0.1
+Router1(dhcp-config)# option 150 ip 192.168.0.1
+Router1(dhcp-config)# exit
+
+
+IMPLEMENTAR DHCP ROTEADOR 2
+
+Router2>
+Router2> enable
+Router2# conf t
+Router2(config)# ip dhcp excluded-address 192.168.1.1
+Router2(config)# ip dhcp pool voz
+Router2(dhcp-config)# network 192.168.1.0 255.255.255.0
+Router2(dhcp-config)# default-router 192.168.1.1
+Router2(dhcp-config)# option 150 ip 192.168.1.1
+Router2(dhcp-config)# exit
+
+
+IMPLEMENTAR DHCP ROTEADOR 3
+
+Router3>
+Router3> enable
+Router3# conf t
+Router3(config)# ip dhcp excluded-address 192.168.2.1
+Router3(config)# ip dhcp pool voz
+Router3(dhcp-config)# network 192.168.2.0 255.255.255.0
+Router3(dhcp-config)# default-router 192.168.2.1
+Router3(dhcp-config)# option 150 ip 192.168.2.1
+Router3(dhcp-config)# exit
+
+
+CONFIGURAÇÃO SWITCH 1
+
+Switch1#
+Switch1# config t
+Switch1(config)# interface range f0/1-10
+Switch1(config-range)# switchport mode access
+Switch1(config-range)# switchport voice vlan 1
+
+
+CONFIGURAÇÃO SWITCH 2
+
+Switch2#
+Switch2# config t
+Switch2(config)# interface range f0/1-10
+Switch2(config-range)# switchport mode access
+Switch2(config-range)# switchport voice vlan 1
+
+
+CONFIGURAÇÃO SWITCH 3
+
+Switch3#
+Switch3# config t
+Switch3(config)# interface range f0/1-10
+Switch3(config-range)# switchport mode access
+Switch3(config-range)# switchport voice vlan 1
+
+
+ROTEADOR 1 - SERVIÇO DE TELEFONE
+
+Router1(config)#
+Router1(config)# telephony-service
+Router1(config-telephony)# max-dn 10
+Router1(config-telephony)# max-ephones 10
+Router1(config-telephony)# ip source-address 192.168.0.1 port 2000 (separar voz e dados)
+Router1(config-telephony)# auto assign 4 to 6
+Router1(config-telephony)# auto assign 1 to 5
+Router1(config-telephony)# do wr
+Router1(config-telephony)# exit
+Router1(config)#
+
+
+ROTEADOR 2 - SERVIÇO DE TELEFONE
+
+Router2(config)#
+Router2(config)# telephony-service
+Router2(config-telephony)# max-dn 10
+Router2(config-telephony)# max-ephones 10
+Router2(config-telephony)# ip source-address 192.168.1.1 port 2000 (separar voz e dados)
+Router2(config-telephony)# auto assign 4 to 6
+Router2(config-telephony)# auto assign 1 to 5
+Router2(config-telephony)# do wr
+Router2(config-telephony)# exit
+Router2(config)#
+
+
+ROTEADOR 3 - SERVIÇO DE TELEFONE
+
+Router3(config)#
+Router3(config)# telephony-service
+Router3(config-telephony)# max-dn 10
+Router3(config-telephony)# max-ephones 10
+Router3(config-telephony)# ip source-address 192.168.2.1 port 2000 (separar voz e dados)
+Router3(config-telephony)# auto assign 4 to 6
+Router3(config-telephony)# auto assign 1 to 5
+Router3(config-telephony)# do wr
+Router3(config-telephony)# exit
+Router3(config)#
+
+
+
+RAMAL 101 e 102
+
+Router1#
+R1# conf t
+R1(config)# ephone-dn1
+R1(config-ephone-dn)# number 101
+R1(config)# exit
+R1(config)# ephone-dn2
+R1(config-ephone-dn)# number 102
+R1(config-ephone-dn)# exit
+R1(config)#
+
+
+ROTEADOR 2 - RAMAL 121 e 122
+
+Router2#
+R1# conf t
+R1(config)# ephone-dn1
+R1(config-ephone-dn)# number 121
+R1(config)# exit
+R1(config)# ephone-dn2
+R1(config-ephone-dn)# number 122
+R1(config-ephone-dn)# exit
+R1(config)#
+
+
+ROTEADOR3 - RAMAL 131 e 132
+
+Router3#
+R1# conf t
+R1(config)# ephone-dn1
+R1(config-ephone-dn)# number 131
+R1(config)# exit
+R1(config)# ephone-dn2
+R1(config-ephone-dn)# number 132
+R1(config-ephone-dn)# exit
+R1(config)#
+
+
+ROTEADOR 1 - SERVICO DE TELEFONE
+
+Router1(config)# dial-peer voice 1 voip
+Router1(config-dial-peer)# destination-pattern 12.
+Router1(config-dial-peer)# session targert ipv4:10.0.0.2
+
+
+ROTEADOR 2 - SERVICO DE TELEFONE
+
+Router2(config)# dial-peer voice 1 voip
+Router2(config-dial-peer)# destination-pattern 10.
+Router2(config-dial-peer)# session target ipv4:10.0.0.1
+Router2(config-dial-peer)# exit
+Router2(config)# dial-peer voice 2 voip
+Router2(config-dial-peer)# destination-pattern 13.
+Router2(config-dial-peer)# session target ipv4:11.0.0.2
+Router2(config-dial-peer)# exit
+
+
+ROTEADOR 3 - SERVICO DE TELEFONE
+
+Router3(config)# dial-peer voice 1 voip
+Router3(config-dial-peer)# destination-pattern 12.
+Router3(config-dial-peer)# session target ipv4: 11.0.0.1
+
+
+ROTEADOR 1 - SERVICO DE TELEFONE
+
+Router1(config)# dial-peer voice 3 voip
+Router1(config-dial-peer)# destination-pattern 13.
+Router1(config-dial-peer)# session target ipv4:11.0.0.2
+
+
+ROTEADOR 3 - SERVICO DE TELEFONE
+
+Router3(config)# dial-peer voice 3 voip
+Router3(config-dial-peer)# destination-pattern 10.
+Router3(config-dial-peer)# session target ipv4:10.0.0.1
