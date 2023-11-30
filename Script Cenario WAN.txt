@@ -204,10 +204,10 @@ RAMAL 101 e 102
 
 Router1#
 R1# conf t
-R1(config)# ephone-dn1
+R1(config)# ephone-dn 1
 R1(config-ephone-dn)# number 101
 R1(config)# exit
-R1(config)# ephone-dn2
+R1(config)# ephone-dn 2
 R1(config-ephone-dn)# number 102
 R1(config-ephone-dn)# exit
 R1(config)#
@@ -217,10 +217,10 @@ ROTEADOR 2 - RAMAL 121 e 122
 
 Router2#
 R1# conf t
-R1(config)# ephone-dn1
+R1(config)# ephone-dn 1
 R1(config-ephone-dn)# number 121
 R1(config)# exit
-R1(config)# ephone-dn2
+R1(config)# ephone-dn 2
 R1(config-ephone-dn)# number 122
 R1(config-ephone-dn)# exit
 R1(config)#
@@ -230,10 +230,10 @@ ROTEADOR3 - RAMAL 131 e 132
 
 Router3#
 R1# conf t
-R1(config)# ephone-dn1
+R1(config)# ephone-dn 1
 R1(config-ephone-dn)# number 131
 R1(config)# exit
-R1(config)# ephone-dn2
+R1(config)# ephone-dn 2
 R1(config-ephone-dn)# number 132
 R1(config-ephone-dn)# exit
 R1(config)#
